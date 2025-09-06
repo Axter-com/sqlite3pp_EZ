@@ -7,7 +7,7 @@
 
 	# Summary
 	This repository is a fork of sqlite3pp, and it includes additional code to add UNICODE support, a template Table class and a SQLite class builder.
-	The sqlite3pp::Table class along with the sqlite3pp::SQLiteClassBuilder class allows C++ developers to use type safe variables assocaited with the table column types.
+	The sqlite3pp::Table class along with the sqlite3pp::SQLiteClassBuilder class allows C++ developers to use type safe variables associated with the table column types.
 
 	This package contains all the files required to use SQLite3, SQLite3pp, and SQLite3pp_EZ.Only minor modifications have been made to SQLite3 C code and SQLite3pp where needed for UNICODE support.Then bulk of the sqlite3pp_EZ implementation is in sqlite3pp_EZ.h and sqlite3pp_EZ.cpp.
 
@@ -157,7 +157,7 @@ namespace sqlite3pp
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////
-	// ostream_w and ostream_a are used to help out stream different charater types.
+	// ostream_w and ostream_a are used to help out stream different character types.
 	struct ostream_w
 	{
 		std::wostream &os;
@@ -194,7 +194,7 @@ namespace sqlite3pp
 		TableArgEnv(const T_STR& Str = T_STR()) :TableArg<TypeName, T_STR>(Get_UpdatedPathCopy(Str)) {}
 	};
 
-	// Constructor aruments
+	// Constructor arguments
 	using PreExecuteArg = TableArg<sql_base::TableArg_PreExecuteArg>;  // Use this argument to perform a SQL Execute before querying the table/view
 	using WhereClauseArg = TableArg<sql_base::TableArg_WhereClauseArg>; // Use this argument to add a where clause when querying the table/view
 	using DbFileNameArg = TableArgEnv<sql_base::TableArg_DbFileNameArg>; // Use this argument to open the specified database file
@@ -269,7 +269,7 @@ namespace sqlite3pp
 		{
 			for (auto i : tvect)
 			{
-				DataType datatype;
+				DataType datatype = { 0 };
 				datatype.setData(i);
 				m_VectType.push_back(datatype);
 			}
@@ -329,7 +329,7 @@ namespace sqlite3pp
 		{
 			for ( auto q : qry )
 			{
-				DataType temp_var;
+				DataType temp_var = {};
 				temp_var.getStreamData( q );
 				m_VectType.push_back( temp_var );
 			}
@@ -466,16 +466,16 @@ namespace sqlite3pp
 	};
 	struct MiscOptions
 	{
-		std::string delimiter;			// Only used with opereator<<, and can be and desired string value to mark seperation between field output. ie:  ",", ", ", " ", ";", ""
-		bool is_public_var_members;		// True to make data members public, and false to make data members protected.
-		bool exclude_get_functions;		// If true, no get function. If false, a get function is created for each data member variable.
-		bool exclude_set_functions;		// If true, no set function. If false, a set function is created for each data member variable.
-		bool exclude_ostream_operator;	// If true, no operator<<. If false, a creates friend declaration, getDelimiter function, and global operator<< for the class
-		bool exclude_comments;			// If true, excludes comments and additional spaces.
-		bool exclude_table_interface;	// If true, excludes sqlite3pp::Table interface functions ( getTableName, getColumnNames, and getStreamData), and excludes Miscellaneous function(s).
-		bool use_basic_types_only;		// If true, only int, double, std::string, and std::wstring are used
-		bool exclude_main_hdr_example;	// If true, excludes example code added to sql_Master_Header.h
-		bool exclude_comment_out_exampl;// If true, does NOT comment out example code
+		std::string delimiter;			// Only used with operator<<, and can be and desired string value to mark separation between field output. ie:  ",", ", ", " ", ";", ""
+		bool is_public_var_members = false;		// True to make data members public, and false to make data members protected.
+		bool exclude_get_functions = false;		// If true, no get function. If false, a get function is created for each data member variable.
+		bool exclude_set_functions = false;		// If true, no set function. If false, a set function is created for each data member variable.
+		bool exclude_ostream_operator = false;	// If true, no operator<<. If false, a creates friend declaration, getDelimiter function, and global operator<< for the class
+		bool exclude_comments = false;			// If true, excludes comments and additional spaces.
+		bool exclude_table_interface = false;	// If true, excludes sqlite3pp::Table interface functions ( getTableName, getColumnNames, and getStreamData), and excludes Miscellaneous function(s).
+		bool use_basic_types_only = false;		// If true, only int, double, std::string, and std::wstring are used
+		bool exclude_main_hdr_example = false;	// If true, excludes example code added to sql_Master_Header.h
+		bool exclude_comment_out_example = false;// If true, does NOT comment out example code
 	}; // Create a custom defined TblClassOptions variable, or used one of the SQLiteClassBuilder predefined types, or use the default type which is automatically set by the SQLiteClassBuilder constructor
 
 	struct TblClassOptions
@@ -512,7 +512,7 @@ namespace sqlite3pp
 			, const std::string& TableOrView_name = CreateHeaderForAllTables	// If equal to "%_CreateHeaderForAllTables_%", a header for each table and view is created. If equal to table or view name, a single header for associated table or view is created. If empty or equal to "#NILL#", the constructor does not create any headers.
 		) :m_db(Db_filename.c_str()), m_options( Init(stroptions, miscoptions, headeropt) ), m_options_org(m_options), m_AppendTableToHeader(false){Init(TableOrView_name, AndWhereClause);}
 
-		// This constructor is best when crating a single header or no headers at all in the contructor. (Headers can also be created by calling CreateHeader or CreateAllHeaders)
+		// This constructor is best when crating a single header or no headers at all in the constructor. (Headers can also be created by calling CreateHeader or CreateAllHeaders)
 		SQLiteClassBuilder(const std::string& Db_filename						// Only Required Field
 			, const std::string& TableOrView_name = ""							// If equal to "%_CreateHeaderForAllTables_%", a header for each table and view is created. If equal to table or view name, a single header for associated table or view is created. If empty or equal to "#NILL#", the constructor does not create any headers.
 			, const std::string &AndWhereClause = ""							// Used when creating multiple tables.  Can specify which tables/views to include via where clause
@@ -541,7 +541,7 @@ namespace sqlite3pp
 		static const MiscOptions MiscOpt_var;	// *NOT* compatible with sqlite3pp:Table. It creates a class with data members only, and it's an option to be used for other interfaces.
 		// Default settings for HeaderOpt
 		static const HeaderOpt HeadersCreatedSqlDir; // Creates headers in sub folder called SQL.
-		static const HeaderOpt HeadersCreadedBaseDir; // Creates headers in the base folder.
+		static const HeaderOpt HeadersCreatedBaseDir; // Creates headers in the base folder.
 
 		static const char *Nill; // = "#NILL#"
 		static const char *CreateHeaderForAllTables; // = "%_CreateHeaderForAllTables_%"
