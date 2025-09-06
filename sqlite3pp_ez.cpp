@@ -26,7 +26,23 @@ SQLITE_EXTENSION_INIT3
 #include <cassert>
 #include <sys/types.h> 
 #include <sys/stat.h>
+#include <direct.h> 
 
+bool DirExists(const std::string& dirName_in) {
+	DWORD ftyp = GetFileAttributesA(dirName_in.c_str());
+	if (ftyp == INVALID_FILE_ATTRIBUTES) {
+		return false; // Directory does not exist or an error occurred
+	}
+	return (ftyp & FILE_ATTRIBUTE_DIRECTORY) != 0; // Check if it's a directory
+}
+
+bool DirExists(const std::wstring& dirName_in) {
+	DWORD ftyp = GetFileAttributesW(dirName_in.c_str());
+	if (ftyp == INVALID_FILE_ATTRIBUTES) {
+		return false; // Directory does not exist or an error occurred
+	}
+	return (ftyp & FILE_ATTRIBUTE_DIRECTORY) != 0; // Check if it's a directory
+}
 
 #define V_COUT(VB, V)		{if (sqlite3pp::sql_base::GetVerbosityLevel() >= sqlite3pp::VBLV_##VB) {std::cout << __FUNCTION__ << ":" << #VB << ": " << V << std::endl;} }
 
@@ -1120,6 +1136,8 @@ namespace sqlite3pp
 		std::ios_base::openmode openMode = m_AppendTableToHeader ? std::ios_base::out | std::ios_base::app : std::ios_base::out;
 		ClassName = m_options.h.header_prefix + TableName + m_options.h.header_postfix;
 		const std::string HeaderFileName = ClassName + "." + m_options.h.file_type;
+		if (!DirExists(m_options.h.dest_folder))
+			_mkdir(m_options.h.dest_folder.c_str());
 		const std::string HeaderFileNameWithFolder = m_options.h.dest_folder + HeaderFileName;
 		myfile.open(HeaderFileNameWithFolder.c_str(), openMode);
 		if (!myfile.is_open())
