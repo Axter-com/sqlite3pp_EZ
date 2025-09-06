@@ -1237,7 +1237,7 @@ namespace sqlite3pp
 					myfile << "\t// Function to test displaying content of all tables & views." << std::endl;
 				myfile << "\tvoid testAllTables()\n\t{" << std::endl;
 				myfile << "\t\tstd::map< std::string, std::shared_ptr < sqlite3pp::TableBase>> myTables = sqlite3pp::testPopulatingAllTables();" << std::endl;
-				myfile << "\t\tfor (auto t : myTables)\n\t\t\tt.second->out(std::wcout);" << std::endl;
+				myfile << "\t\tfor (auto& t : myTables)\n\t\t\tt.second->out(std::wcout);" << std::endl;
 				myfile << "\t}" << std::endl;
 
 				myfile << "}" << std::endl;
