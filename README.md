@@ -14,13 +14,13 @@ This package contains all the files required to use SQLite3, SQLite3pp, and SQLi
 ## Unicode support.
  * Example:
 ````cpp
-sqlite3pp::setGlobalDB(L"Exchange_€To$_database.db");
+sqlite3pp::setGlobalDB(L"MyDatabase.db");
 sqlite3pp::Execute(_T("INSERT OR REPLACE INTO FileName VALUES ('") + sfileName + _T("', '") + sfileExt + _T("');"));
-SQLiteClassBuilder	createMyClasses(
-		"Exchange_€To$_database.db"
-		, SQLiteClassBuilder::std_wstring_protected_members	// This option creates a class with std::wstring as the default string, and protected member variables.
-		, ""							// Set this to a specific table or view, in which one class is created, or set it to empty to create a class for each table and view in the database.
-	);
+sqlite3pp::SQLiteClassBuilder	createMyClasses(
+	"MyDatabase.db"
+	, sqlite3pp::SQLiteClassBuilder::strOpt_std_wstring	// This option creates a class with std::wstring as the default string.
+	, ""							// Set this to a specific table or view, in which one class is created, or set it to empty to create a class for each table and view in the database.
+);
 ````
 ## Generic template Table class having the following features:
  * Type safety for table column fields, include additional types added by SQLite3.
