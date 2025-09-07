@@ -964,8 +964,8 @@ namespace sqlite3pp
 	// Predefined string options
 	const StrOptions SQLiteClassBuilder::strOpt_std_string		= { "std::string", "sqlite3pp::to_string", "", "", "#include <string>" };
 	const StrOptions SQLiteClassBuilder::strOpt_std_wstring		= { "std::wstring", "sqlite3pp::to_wstring", "L", "", "#include <string>" };
-	const StrOptions SQLiteClassBuilder::strOpt_sql_tstring		= { "sqlite3pp::tstring", "sqlite3pp::to_tstring", "T_(", ")", "#include \"sqlite3pp_ez.h\"" };
-	const StrOptions SQLiteClassBuilder::strOpt_sql_tstring_T	= { "sqlite3pp::tstring", "sqlite3pp::to_tstring", "_T(", ")", "#define _UNICODE\n#include <tchar.h>\n#include \"sqlite3pp_ez.h\"" };
+	const StrOptions SQLiteClassBuilder::strOpt_sql_tstring		= { "sqlite3pp::tstring", "sqlite3pp::to_tstring", "T_(", ")", "" };
+	const StrOptions SQLiteClassBuilder::strOpt_sql_tstring_T	= { "sqlite3pp::tstring", "sqlite3pp::to_tstring", "_T(", ")", "#define _UNICODE\n#include <tchar.h>" };
 	// Predefined MiscOptions for common settings
 	const MiscOptions SQLiteClassBuilder::MiscOpt_max = { ",", false, false, false, false, false, false, false, false, false };
 	const MiscOptions SQLiteClassBuilder::MiscOpt_min = { ",", true, true, true, true, true, false, false, true, true };
