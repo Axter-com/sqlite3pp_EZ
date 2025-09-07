@@ -79,6 +79,7 @@ namespace sqlite3pp
 		using Nvarchar = std::wstring;
 		using Character = std::string;
 		using Varchar = std::string;
+		using Text = sqlite3pp::TEXT;
 
 
 		friend database& setGlobalDB( const std::string& db_filename, ActionIfDatabaseOpen actionifopen);
@@ -477,6 +478,7 @@ namespace sqlite3pp
 		bool exclude_main_hdr_example = false;	// If true, excludes example code added to sql_Master_Header.h
 		bool exclude_comment_out_example = false;// If true, does NOT comment out example code
 		bool initialize_member_variables = true;// If true, initialize class member variables in header
+		bool initialize_str_member_var = false;	// If true, initialize class member string variables in header
 	}; // Create a custom defined TblClassOptions variable, or used one of the SQLiteClassBuilder predefined types, or use the default type which is automatically set by the SQLiteClassBuilder constructor
 
 	struct TblClassOptions
