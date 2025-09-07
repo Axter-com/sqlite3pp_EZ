@@ -476,6 +476,7 @@ namespace sqlite3pp
 		bool use_basic_types_only = false;		// If true, only int, double, std::string, and std::wstring are used
 		bool exclude_main_hdr_example = false;	// If true, excludes example code added to sql_Master_Header.h
 		bool exclude_comment_out_example = false;// If true, does NOT comment out example code
+		bool initialize_member_variables = true;// If true, initialize class member varibles in header
 	}; // Create a custom defined TblClassOptions variable, or used one of the SQLiteClassBuilder predefined types, or use the default type which is automatically set by the SQLiteClassBuilder constructor
 
 	struct TblClassOptions
@@ -494,7 +495,7 @@ namespace sqlite3pp
 		std::vector<std::string> m_HeadersCreated;
 		std::vector<std::string> m_ClassNames;
 		std::string GetType(const std::string &tblVw, const std::string &colName, const char* str);
-		std::string GetType_s(const std::string &tblVw, const std::string &colName, const char* str);
+		std::string GetType_s(const std::string &tblVw, const std::string &colName, const char* str) const;
 		TblClassOptions Init(const StrOptions & stroptions, const MiscOptions & miscoptions, const HeaderOpt & headeropt);
 		void Init(
 			  const std::string& TableOrView_name
@@ -529,6 +530,7 @@ namespace sqlite3pp
 		const std::vector<std::string>& GetHeadersCreated() const { return m_HeadersCreated; }
 		const std::vector<std::string>& GetClassNames() const { return m_ClassNames; }
 		const std::string& GetDestFolder() const { return m_options.h.dest_folder; }
+		std::string InitializeValue(std::string TypeName) const;
 
 		// Predefined string options
 		static const StrOptions strOpt_std_string ;		// TEXT type defaults to std::string

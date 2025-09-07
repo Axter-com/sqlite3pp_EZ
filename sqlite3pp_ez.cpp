@@ -979,7 +979,7 @@ namespace sqlite3pp
 		return strtype;
 	}
 
-	std::string SQLiteClassBuilder::GetType_s(const std::string &tblVw, const std::string &colName, const char* str_org)
+	std::string SQLiteClassBuilder::GetType_s(const std::string &tblVw, const std::string &colName, const char* str_org) const
 	{
 		const std::string DefaultType = "Text";
 		if (!str_org)
@@ -1286,6 +1286,32 @@ namespace sqlite3pp
 		}
 		return NULL;
 	}
+	std::string str_toupper(std::string s)
+	{
+		std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::toupper(c); });
+		return s;
+	}
+
+	std::string SQLiteClassBuilder::InitializeValue(std::string TypeName) const
+	{
+		TypeName = str_toupper(TypeName);
+		if (!m_options.m.initialize_member_variables)
+			return "";
+		if (TypeName == "TEXT")
+			return " = " + m_options.s.str_pre + "\"\"" + m_options.s.str_post;
+		if (TypeName == "TEXT" || TypeName == "Character" || TypeName == "Varchar")
+			return " = \"\"";
+		if (TypeName == "Nchar" || TypeName == "Nvarchar")
+			return " = " + m_options.s.str_pre + "\"\"" + m_options.s.str_post;
+		if (TypeName == "BOOLEAN")
+			return " = false";
+		if (TypeName == "INTEGER" || TypeName == "INT" || TypeName == "INT2" || TypeName == "INT8" || TypeName == "TINYINT" ||
+			TypeName == "Smallint" || TypeName == "Mediumint" || TypeName == "Bigint" || TypeName == "UBigint")
+			return " = 0";
+		if (TypeName == "REAL" || TypeName == "DOUBLEPRCSN" || TypeName == "NUMERIC" || TypeName == "DECIMAL" || TypeName == "DOUBLE" || TypeName == "FLOAT")
+			return " = 0.0f";
+		return "";
+	}
 
 	bool SQLiteClassBuilder::ProcessClassCreation(const std::string& TableName, std::string QueryStr)
 	{
@@ -1412,7 +1438,7 @@ namespace sqlite3pp
 		myfile << publicOrPrivate << ":" << std::endl;
 		// Define data member variables associated with the table/view
 		for (auto& c : columns)
-			myfile << "\t" << c.second << " " << c.first << ";" << std::endl;
+			myfile << "\t" << c.second << " " << c.first << InitializeValue(c.second) << ";" << std::endl;
 
 		const std::string OperatorStreamComment1 = "/* sqlite3pp::TableOStream container interface.\n\tFunctions OStream(), operator<<(), and Delimiter() are required when using the sqlite3pp::TableOStream container.\n\tExample Usage:\t\t(Using sqlite3pp::TableOStream container)\n\t\t\tTableOStream<" + ClassName + "> tbl(DbFileNameArg(\"myDatabase.db\"));\n\t\t\ttbl.setDelimit(\"|\"); // Change delimiter\n\t\t\tstd::cout << tbl; // Send data to screen with the changed delimiter\n\n\t\t\tstd::ofstream ofs (\"data.csv\", std::ofstream::out);\n\t\t\ttbl.setDelimit(\",\"); // Change delimiter\n\t\t\tofs << tbl; // Write data to a CSV file using the changed \",\" delimiter.\n\n\t\t\ttbl.out(std::cout); // Send data to screen using out() member function.\n\tTo exclude TableOStream interface, set exclude_ostream_operator to true when creating this class using SQLiteClassBuilder.\n\t*/\n";
 		const char* OperatorStreamComment2 = "// sqlite3pp::TableOStream container interface.\n";
