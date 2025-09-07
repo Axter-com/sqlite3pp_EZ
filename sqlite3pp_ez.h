@@ -476,7 +476,7 @@ namespace sqlite3pp
 		bool use_basic_types_only = false;		// If true, only int, double, std::string, and std::wstring are used
 		bool exclude_main_hdr_example = false;	// If true, excludes example code added to sql_Master_Header.h
 		bool exclude_comment_out_example = false;// If true, does NOT comment out example code
-		bool initialize_member_variables = true;// If true, initialize class member varibles in header
+		bool initialize_member_variables = true;// If true, initialize class member variables in header
 	}; // Create a custom defined TblClassOptions variable, or used one of the SQLiteClassBuilder predefined types, or use the default type which is automatically set by the SQLiteClassBuilder constructor
 
 	struct TblClassOptions
@@ -509,7 +509,7 @@ namespace sqlite3pp
 			, const StrOptions &stroptions										// StrOptions is used to define the default string type.  Can be set to a custom define StrOptions, or to one of the predefined common options (strOpt_std_string, strOpt_std_wstring, strOpt_std_tstring, strOpt_sql_tstring)
 			, const std::string &AndWhereClause = ""							// Used when creating multiple tables.  Can specify which tables/views to include via where clause
 			, const MiscOptions &miscoptions = MiscOpt_max						// MiscOptions is used to define miscellaneous options.  Can be set to a custom define MiscOptions, or to one of the predefined common options (MiscOpt_max, MiscOpt_min, MiscOpt_var)
-			, const HeaderOpt &headeropt = HeadersCreatedSqlDir						// HeaderOpt is used to define the naming convention to use when creating the header file(s).
+			, const HeaderOpt &headeropt = HeadersCreatedSqlDir					// HeaderOpt is used to define the naming convention to use when creating the header file(s).
 			, const std::string& TableOrView_name = CreateHeaderForAllTables	// If equal to "%_CreateHeaderForAllTables_%", a header for each table and view is created. If equal to table or view name, a single header for associated table or view is created. If empty or equal to "#NILL#", the constructor does not create any headers.
 		) :m_db(Db_filename.c_str()), m_options( Init(stroptions, miscoptions, headeropt) ), m_options_org(m_options), m_AppendTableToHeader(false){Init(TableOrView_name, AndWhereClause);}
 
@@ -520,6 +520,14 @@ namespace sqlite3pp
 			, const StrOptions &stroptions = strOpt_std_string					// StrOptions is used to define the default string type.  Can be set to a custom define StrOptions, or to one of the predefined common options (strOpt_std_string, strOpt_std_wstring, strOpt_std_tstring, strOpt_sql_tstring)
 			, const MiscOptions &miscoptions = MiscOpt_max						// MiscOptions is used to define miscellaneous options.  Can be set to a custom define MiscOptions, or to one of the predefined common options (MiscOpt_max, MiscOpt_min, MiscOpt_var)
 			, const HeaderOpt &headeropt = HeadersCreatedSqlDir						// HeaderOpt is used to define the naming convention to use when creating the header file(s).
+		) :m_db(Db_filename.c_str()), m_options( Init(stroptions, miscoptions, headeropt) ), m_options_org(m_options), m_AppendTableToHeader(false){Init(TableOrView_name, AndWhereClause);}
+
+		SQLiteClassBuilder(const std::string& Db_filename						
+			, const StrOptions &stroptions										// StrOptions is used to define the default string type.  Can be set to a custom define StrOptions, or to one of the predefined common options (strOpt_std_string, strOpt_std_wstring, strOpt_std_tstring, strOpt_sql_tstring)
+			, const HeaderOpt &headeropt										// HeaderOpt is used to define the naming convention to use when creating the header file(s).
+			, const MiscOptions &miscoptions = MiscOpt_max						// MiscOptions is used to define miscellaneous options.  Can be set to a custom define MiscOptions, or to one of the predefined common options (MiscOpt_max, MiscOpt_min, MiscOpt_var)
+			, const std::string& TableOrView_name = CreateHeaderForAllTables	// If equal to "%_CreateHeaderForAllTables_%", a header for each table and view is created. If equal to table or view name, a single header for associated table or view is created. If empty or equal to "#NILL#", the constructor does not create any headers.
+			, const std::string &AndWhereClause = ""							// Used when creating multiple tables.  Can specify which tables/views to include via where clause
 		) :m_db(Db_filename.c_str()), m_options( Init(stroptions, miscoptions, headeropt) ), m_options_org(m_options), m_AppendTableToHeader(false){Init(TableOrView_name, AndWhereClause);}
 
 		~SQLiteClassBuilder();

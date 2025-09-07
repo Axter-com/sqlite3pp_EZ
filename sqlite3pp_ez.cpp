@@ -148,6 +148,12 @@ namespace sqlite3pp
 		return to_wstring(sqlite3pp::to_string(src));
 	}
 
+	static std::string str_toupper(std::string s)
+	{
+		std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::toupper(c); });
+		return s;
+	}
+
 	static bool isValidDate(const Date& t)
 	{
 		if (t.t < 1)
@@ -956,10 +962,10 @@ namespace sqlite3pp
   ////////////////////////////////////////////////////////////////////////////////////////////
   // SQLiteClassBuilder Predefines.
 	// Predefined string options
-	const StrOptions SQLiteClassBuilder::strOpt_std_string = { "std::string", "sqlite3pp::to_string", "", "", "#include <string>" };
-	const StrOptions SQLiteClassBuilder::strOpt_std_wstring = { "std::wstring", "sqlite3pp::to_wstring", "L", "", "#include <string>" };
-	const StrOptions SQLiteClassBuilder::strOpt_sql_tstring = { "sqlite3pp::tstring", "sqlite3pp::to_tstring", "T_(", ")", "#include \"sqlite3pp_ez.h\"" };
-	const StrOptions SQLiteClassBuilder::strOpt_sql_tstring_T = { "sqlite3pp::tstring", "sqlite3pp::to_tstring", "_T(", ")", "#include \"sqlite3pp_ez.h\"" };
+	const StrOptions SQLiteClassBuilder::strOpt_std_string		= { "std::string", "sqlite3pp::to_string", "", "", "#include <string>" };
+	const StrOptions SQLiteClassBuilder::strOpt_std_wstring		= { "std::wstring", "sqlite3pp::to_wstring", "L", "", "#include <string>" };
+	const StrOptions SQLiteClassBuilder::strOpt_sql_tstring		= { "sqlite3pp::tstring", "sqlite3pp::to_tstring", "T_(", ")", "#include \"sqlite3pp_ez.h\"" };
+	const StrOptions SQLiteClassBuilder::strOpt_sql_tstring_T	= { "sqlite3pp::tstring", "sqlite3pp::to_tstring", "_T(", ")", "#include \"sqlite3pp_ez.h\"" };
 	// Predefined MiscOptions for common settings
 	const MiscOptions SQLiteClassBuilder::MiscOpt_max = { ",", false, false, false, false, false, false, false, false, false };
 	const MiscOptions SQLiteClassBuilder::MiscOpt_min = { ",", true, true, true, true, true, false, false, true, true };
@@ -1100,7 +1106,7 @@ namespace sqlite3pp
 			if (m_options.h.dest_folder[m_options.h.dest_folder.size() - 1] == '/')
 				m_options.h.dest_folder[m_options.h.dest_folder.size() - 1] = '\\';
 			else if (m_options.h.dest_folder[m_options.h.dest_folder.size() - 1] != '\\')
-				m_options.h.dest_folder = +"\\";
+				m_options.h.dest_folder += "\\";
 			V_COUT(DEBUG, "Using destination path '" << m_options.h.dest_folder << "'.");
 		}
 
@@ -1285,11 +1291,6 @@ namespace sqlite3pp
 			return NULL;
 		}
 		return NULL;
-	}
-	std::string str_toupper(std::string s)
-	{
-		std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::toupper(c); });
-		return s;
 	}
 
 	std::string SQLiteClassBuilder::InitializeValue(std::string TypeName) const
