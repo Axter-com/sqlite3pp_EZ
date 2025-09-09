@@ -72,12 +72,12 @@ namespace sqlite3pp
 
   } // namespace
 
-  database::database( char const* dbname, int flags, char const* vfs ) : db_( nullptr ), borrowing_( false )
+  database::database(char const* dbname, int flags, char const* vfs) : db_(nullptr), borrowing_(false)
   {
-	if (dbname) {
-		  auto rc = connect( dbname, flags, vfs );
-		  if ( rc != SQLITE_OK )
-			  throw database_error( "can't connect database" );
+	  if (dbname) {
+		  auto rc = connect(dbname, flags, vfs);
+		  if (rc != SQLITE_OK)
+			  throw database_error("can't connect database");
 	  }
   }
 
@@ -93,7 +93,7 @@ namespace sqlite3pp
 	uh_(std::move(db.uh_)),
 	ah_(std::move(db.ah_))
   {
-	db.db_ = nullptr;
+	  db.db_ = nullptr;
   }
 
   database& database::operator=(database&& db)
@@ -407,7 +407,7 @@ namespace sqlite3pp
   }
 
 
-  command::bindstream::bindstream(command& cmd, int idx) : cmd_(cmd), idx_(idx)
+  command::BindStream::BindStream(command& cmd, int idx) : cmd_(cmd), idx_(idx)
   {
   }
 
@@ -415,9 +415,9 @@ namespace sqlite3pp
   {
   }
 
-  command::bindstream command::binder(int idx)
+  command::BindStream command::binder(int idx)
   {
-	return bindstream(*this, idx);
+	return BindStream(*this, idx);
   }
 
   int command::execute()
@@ -453,7 +453,7 @@ namespace sqlite3pp
   }
 
 
-  query::rows::getstream::getstream(rows* rws, int idx) : rws_(rws), idx_(idx)
+  query::rows::GetStream::GetStream(rows* rws, int idx) : rws_(rws), idx_(idx)
   {
   }
 
@@ -515,9 +515,9 @@ namespace sqlite3pp
   {
 	return ignore;
   }
-  query::rows::getstream query::rows::getter(int idx)
+  query::rows::GetStream query::rows::getter(int idx)
   {
-	return getstream(this, idx);
+	return GetStream(this, idx);
   }
 
   query::query_iterator::query_iterator() : cmd_(0)

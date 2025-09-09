@@ -78,17 +78,17 @@ namespace sqlite3pp
   class null_type {};
   extern null_type ignore;
 
-  class noncopyable
+  class NonCopyable
   {
    protected:
-	noncopyable() = default;
-	~noncopyable() = default;
+	NonCopyable() = default;
+	~NonCopyable() = default;
 
-	noncopyable(noncopyable&&) = default;
-	noncopyable& operator=(noncopyable&&) = default;
+	NonCopyable(NonCopyable&&) = default;
+	NonCopyable& operator=(NonCopyable&&) = default;
 
-	noncopyable(noncopyable const&) = delete;
-	noncopyable& operator=(noncopyable const&) = delete;
+	NonCopyable(NonCopyable const&) = delete;
+	NonCopyable& operator=(NonCopyable const&) = delete;
   };
 
   //struct sqlite3_api_routines;
@@ -98,7 +98,7 @@ namespace sqlite3pp
 	  db_api_root();
   };
 
-  class database : public db_api_root, private noncopyable
+  class database : public db_api_root, private NonCopyable
   {
 	friend class statement;
 	friend class database_error;
@@ -188,7 +188,7 @@ namespace sqlite3pp
 
   enum copy_semantic { copy, nocopy };
 
-  class statement : public db_api_root, private noncopyable
+  class statement : public db_api_root, private NonCopyable
   {
    public:
 	int prepare(char const* stmt);
@@ -237,13 +237,13 @@ namespace sqlite3pp
   class command : public statement
   {
    public:
-	class bindstream
+	class BindStream
 	{
 	 public:
-	  bindstream(command& cmd, int idx);
+	  BindStream(command& cmd, int idx);
 
 	  template <class T>
-	  bindstream& operator << (T value) {
+	  BindStream& operator << (T value) {
 		auto rc = cmd_.bind(idx_, value);
 		if (rc != SQLITE_OK) {
 		  throw database_error(cmd_.db_);
@@ -251,7 +251,7 @@ namespace sqlite3pp
 		++idx_;
 		return *this;
 	  }
-	  bindstream& operator << (char const* value) {
+	  BindStream& operator << (char const* value) {
 		auto rc = cmd_.bind(idx_, value, copy);
 		if (rc != SQLITE_OK) {
 		  throw database_error(cmd_.db_);
@@ -259,7 +259,7 @@ namespace sqlite3pp
 		++idx_;
 		return *this;
 	  }
-	  bindstream& operator << (std::string const& value) {
+	  BindStream& operator << (std::string const& value) {
 		auto rc = cmd_.bind(idx_, value, copy);
 		if (rc != SQLITE_OK) {
 		  throw database_error(cmd_.db_);
@@ -275,7 +275,7 @@ namespace sqlite3pp
 
 	explicit command(database& db, char const* stmt = nullptr);
 
-	bindstream binder(int idx = 1);
+	BindStream binder(int idx = 1);
 
 	int execute();
 	int execute_all();
@@ -287,13 +287,13 @@ namespace sqlite3pp
 	class rows
 	{
 	 public:
-	  class getstream
+	  class GetStream
 	  {
 	   public:
-		getstream(rows* rws, int idx);
+		GetStream(rows* rws, int idx);
 
 		template <class T>
-		getstream& operator >> (T& value) {
+		GetStream& operator >> (T& value) {
 		  value = rws_->get(idx_, T());
 		  ++idx_;
 		  return *this;
@@ -320,7 +320,7 @@ namespace sqlite3pp
 		return std::make_tuple(get(idxs, Ts())...);
 	  }
 
-	  getstream getter(int idx = 0);
+	  GetStream getter(int idx = 0);
 
 	 private:
 	  int get(int idx, int) const;
@@ -366,8 +366,6 @@ namespace sqlite3pp
 	  bool operator!=(query_iterator const&) const;
 
 	  query_iterator& operator++();
-
-//#pragma warning(disable : 4996)
 	  query::rows operator*() const;
 
 	 private:
@@ -390,7 +388,7 @@ namespace sqlite3pp
 	iterator end();
   };
 
-  class transaction : public db_api_root, private noncopyable
+  class transaction : public db_api_root, private NonCopyable
   {
    public:
 	explicit transaction(database& db, bool fcommit = false, bool freserve = false);
