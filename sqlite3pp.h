@@ -61,13 +61,23 @@
 #include <memory> // [David Maisonave changes] -- Required for Blob & Clob types
 #include <ctime>  // [David Maisonave changes] -- Required for Date & Datetime types
 
+#ifdef __CLR_VER // [David Maisonave changes] -- Used for run time level connection to SQLite3.dll
+#define SQLITE_MANAGE_CODE
+#endif
+
 #ifdef SQLITE3PP_LOADABLE_EXTENSION
 #include "sqlite3ext.h"
 SQLITE_EXTENSION_INIT1
 #else
 #include "sqlite3.h"
 #endif
-#include "SQLiteDLLConnect.h"// [David Maisonave changes] -- Used for run time level connection to SQLite3.dll
+
+#ifdef SQLITE_MANAGE_CODE // [David Maisonave changes] -- Used for run time level connection to SQLite3.dll
+#include "SQLiteDLLConnect.h"
+#define SQLITEDLLCONNECT SQLiteDLLConnect::
+#else
+#define SQLITEDLLCONNECT
+#endif
 
 namespace sqlite3pp
 {
@@ -116,7 +126,9 @@ namespace sqlite3pp
 
   class database : NonCopyable
   {
+#ifdef SQLITE_MANAGE_CODE
 		SQLite_DLL::RunTimeConnect* runTimeConnect = NULL;// [David Maisonave changes] -- Used for run time level connection to SQLite3.dll
+#endif
 	friend class statement;
 	friend class database_error;
 	friend class ext::function;
@@ -134,8 +146,8 @@ namespace sqlite3pp
 	explicit database( char const* dbname = nullptr, int flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, const char* vfs = nullptr );
 	database(database&& db);
 	database& operator=(database&& db);
-		database(const std::string dbname, int flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, const char* vfs = nullptr);// [David Maisonave changes] -- Add std::string support
-		database(sqlite3* pdb); // [David Maisonave changes] -- Not sure why this was made private, but this constructor can be usefull when mixing classes of similar type.
+	database(const std::string dbname, int flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, const char* vfs = nullptr);// [David Maisonave changes] -- Add std::string support
+	database(sqlite3* pdb); // [David Maisonave changes] -- Not sure why this was made private, but this constructor can be usefull when mixing classes of similar type.
 	~database();
 	
 #ifndef SQLITE3PP_NO_UNICODE	

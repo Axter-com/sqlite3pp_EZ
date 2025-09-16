@@ -17,7 +17,6 @@
 SQLITE_EXTENSION_INIT3
 #endif
 
-#include "SQLiteDLLConnect.h"
 #include "sqlite3pp_ez.h"
 #include <vector>
 #include <string>
@@ -39,12 +38,12 @@ namespace sqlite3pp
 	std::wstring to_wstring( const char* src )
 	{
 		int nchars = MultiByteToWideChar( CP_ACP, 0, src, -1, NULL, 0 );
-		wchar_t* wsource = new wchar_t[nchars + 2]();
-		if ( wsource == NULL )
+		wchar_t* wSource = new wchar_t[nchars + 2]();
+		if (wSource == NULL )
 			return std::wstring();
-		MultiByteToWideChar( CP_ACP, 0, src, -1, wsource, nchars );
+		MultiByteToWideChar( CP_ACP, 0, src, -1, wSource, nchars );
 		std::wstring returnVal = wSource;
-		delete[] wsource;
+		delete[] wSource;
 		return returnVal;
 	}
 
@@ -252,12 +251,12 @@ namespace sqlite3pp
 		{
 			disconnect();
 		}
-		return SQLiteDLLConnect::sqlite3_open16( db_filename, &db_ );
+		return SQLITEDLLCONNECT sqlite3_open16( db_filename, &db_ );
 	}
 
 	database::database(const wchar_t * db_filename, int flags, const wchar_t * vfs ) : db_( nullptr ), borrowing_( false )
 	{
-		// static int rc = SQLiteDLLConnect::sqlite3_db_config(db_, SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION, 1, NULL);
+		// static int rc = SQLITEDLLCONNECT sqlite3_db_config(db_, SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION, 1, NULL);
 		if ( db_filename )
 		{
 			auto rc = connect( db_filename, flags, vfs );
@@ -316,7 +315,7 @@ namespace sqlite3pp
 			char const** a;
 			void const ** v;
 		}myw2v = {&tail_ };
-		int rc = SQLiteDLLConnect::sqlite3_prepare16_v2( db_.db_, stmt, static_cast<int>(std::wcslen( stmt )), &stmt_, myw2v.v );
+		int rc = SQLITEDLLCONNECT sqlite3_prepare16_v2( db_.db_, stmt, static_cast<int>(std::wcslen( stmt )), &stmt_, myw2v.v );
 		return rc;
 	}
 
@@ -672,7 +671,7 @@ namespace sqlite3pp
 #ifndef SQLITE3PP_NO_UNICODE
 	wchar_t const* query::rows::get(int idx, wchar_t const*) const
 	{
-		return reinterpret_cast<wchar_t const*>(SQLiteDLLConnect::sqlite3_column_text16(stmt_, idx));
+		return reinterpret_cast<wchar_t const*>(SQLITEDLLCONNECT sqlite3_column_text16(stmt_, idx));
 	}
 
 	std::wstring query::rows::get(int idx, const std::wstring&) const
@@ -683,7 +682,7 @@ namespace sqlite3pp
 		bool AllowNullStringReturn = false;
 #endif  // !SQLITE3PP_ALLOW_NULL_STRING_RETURN
 		std::wstring value;
-		const char * strtype = SQLiteDLLConnect::sqlite3_column_decltype(stmt_, idx);
+		const char * strtype = SQLITEDLLCONNECT sqlite3_column_decltype(stmt_, idx);
 		if (!strtype)
 		{
 			V_COUT(WARN, "Received NULL value when getting column type for idx " << idx << ". Treating type as ASCII or UTF8.");
@@ -733,7 +732,7 @@ namespace sqlite3pp
 	Blob query::rows::get(int idx, const Blob&) const
 	{
 		const int data_len = column_bytes(idx);
-		const unsigned char* ptr = static_cast<const unsigned char*>(SQLiteDLLConnect::sqlite3_column_blob(stmt_, idx));
+		const unsigned char* ptr = static_cast<const unsigned char*>(SQLITEDLLCONNECT sqlite3_column_blob(stmt_, idx));
 		Blob data(new std::vector<unsigned char>(ptr, ptr + data_len));
 		return data;
 	}
@@ -741,7 +740,7 @@ namespace sqlite3pp
 	Clob query::rows::get(int idx, const Clob&) const
 	{
 		const int data_len = column_bytes(idx);
-		const char* ptr = static_cast<const char*>(SQLiteDLLConnect::sqlite3_column_blob(stmt_, idx));
+		const char* ptr = static_cast<const char*>(SQLITEDLLCONNECT sqlite3_column_blob(stmt_, idx));
 		Clob data(new std::vector<char>(ptr, ptr + data_len));
 		return data;
 	}
@@ -763,12 +762,12 @@ namespace sqlite3pp
 
 	unsigned long long int query::rows::get(int idx, const unsigned long long int&) const
 	{
-		return static_cast<unsigned long long int>(SQLiteDLLConnect::sqlite3_column_int64(stmt_, idx));
+		return static_cast<unsigned long long int>(SQLITEDLLCONNECT sqlite3_column_int64(stmt_, idx));
 	}
 
 	Date query::rows::get(int idx, const Date&) const
 	{
-		const char* s = reinterpret_cast<const char*>(SQLiteDLLConnect::sqlite3_column_text(stmt_, idx));
+		const char* s = reinterpret_cast<const char*>(SQLITEDLLCONNECT sqlite3_column_text(stmt_, idx));
 		std::tm d = { 0 };
 		Date data = { 0 };
 		int rc = sscanf_s(s, "%d-%d-%d", &d.tm_year, &d.tm_mon, &d.tm_mday);
@@ -796,7 +795,7 @@ namespace sqlite3pp
 	Datetime query::rows::get(int idx, const Datetime&) const
 	{
 		Datetime data = { 0 };
-		const char* s = reinterpret_cast<const char*>(SQLiteDLLConnect::sqlite3_column_text(stmt_, idx));
+		const char* s = reinterpret_cast<const char*>(SQLITEDLLCONNECT sqlite3_column_text(stmt_, idx));
 		int rc = sscanf_s(s, "%d-%d-%d %d:%d:%d", &data.tm_struct.tm_year, &data.tm_struct.tm_mon, &data.tm_struct.tm_mday, &data.tm_struct.tm_hour, &data.tm_struct.tm_min, &data.tm_struct.tm_sec);
 		if (rc < 1 || !data.tm_struct.tm_mday)
 		{
