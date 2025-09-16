@@ -22,7 +22,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// David Maisonave -- Nov-2021 Updated (std::string query::rows::get) to gracefully handle NULL string
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Mod Author: David Maisonave - Sep-2025
+// This a modified version of [Wongoo Lee] original sqlite3pp.
+// - Source comes from the following link: https://github.com/iwongu/sqlite3pp
+// This version was originally modified by David Maisonave Nov-2021,
+// and then additional modifications made in Sep-2025.
+// 
+// Most of the 2025 changes are associated with compiling with manage C++ code.
+// 
+// Changes:
+// - Added UNICODE API's.
+// - Change some names to avoid spell checker errors.
+// - Changed local include to use "" instead of <>, to avoid compiler error on some systems.
+// - Added functions that take std::string
+// - Other miscellaneous changes where I added comments [David Maisonave changes]
 
 #include <cstring>
 #include <memory>
@@ -37,6 +52,7 @@ SQLITE_EXTENSION_INIT1
 namespace sqlite3pp
 {
   null_type ignore;
+  void* NULLPTR = NULL; // [David Maisonave changes] -- Used to replace [nullptr] which did not compile in manage C++ code
 
   namespace
   {
@@ -78,6 +94,15 @@ namespace sqlite3pp
 		  auto rc = connect(dbname, flags, vfs);
 		  if (rc != SQLITE_OK)
 			  throw database_error("can't connect database");
+	  }
+  }
+
+  database::database(const std::string dbname, int flags, char const* vfs ) : db_( nullptr ), borrowing_( false )
+  {
+	if (dbname.size() > 0) {
+		  auto rc = connect( dbname.c_str(), flags, vfs);
+		  if ( rc != SQLITE_OK )
+			  throw database_error( "can't connect database" );
 	  }
   }
 
@@ -246,13 +271,16 @@ namespace sqlite3pp
 	return sqlite3_exec(db_, sql, 0, 0, 0);
   }
 
-  int database::executef(char const* sql, ...)
+  int database::executef(char const* sql, const char* dbname, const char* name)
   {
-	va_list ap;
-	va_start(ap, sql);
-	std::shared_ptr<char> msql(sqlite3_vmprintf(sql, ap), sqlite3_free);
-	va_end(ap);
-
+	  char* data = sqlite3_vmprintf(sql, (char*)dbname);
+	  std::shared_ptr<char> msql(sqlite3_vmprintf(data, (char*)name), sqlite3_free);
+	  sqlite3_free(data);
+	  return execute(msql.get());
+  }
+  int database::executef(char const* sql, const char* name)
+  {
+	  std::shared_ptr<char> msql(sqlite3_vmprintf(sql, (char*)name), sqlite3_free);
 	return execute(msql.get());
   }
 
@@ -550,7 +578,7 @@ namespace sqlite3pp
 	return *this;
   }
 
-  query::rows query::query_iterator::operator*() const
+  query::query_iterator::value_type query::query_iterator::operator*() const
   {
 	return rows(cmd_->stmt_);
   }

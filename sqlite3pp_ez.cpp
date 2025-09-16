@@ -42,9 +42,9 @@ namespace sqlite3pp
 		if ( wsource == NULL )
 			return std::wstring();
 		MultiByteToWideChar( CP_ACP, 0, src, -1, wsource, nchars );
-		std::wstring retrnVal = wsource;
+		std::wstring returnVal = wSource;
 		delete[] wsource;
-		return retrnVal;
+		return returnVal;
 	}
 
 	std::string to_string( const wchar_t* src )
@@ -54,9 +54,9 @@ namespace sqlite3pp
 		if ( source == NULL )
 			return std::string();
 		WideCharToMultiByte( CP_ACP, 0, src, -1, source, nchars, NULL, NULL );
-		std::string retrnVal = source;
+		std::string returnVal = source;
 		delete[] source;
-		return retrnVal;
+		return returnVal;
 	}
 
 	std::string to_string(const std::wstring &src)
@@ -243,14 +243,6 @@ namespace sqlite3pp
 	VerbosityLevels sql_base::GetVerbosityLevel()
 	{
 		return m_VerbosityLevels;
-	}
-
-	db_api_root::db_api_root()
-	{
-#ifdef SQLITE3PP_LOADABLE_EXTENSION
-		static sqlite3_api_routines Glbl_sqlite3_api_routines;
-		SQLITE_EXTENSION_INIT2(&Glbl_sqlite3_api_routines);
-#endif // SQLITE3PP_LOADABLE_EXTENSION
 	}
 
 	int database::connect( const  wchar_t* db_filename, int flags, const wchar_t * vfs )
