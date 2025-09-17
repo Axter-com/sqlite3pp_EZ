@@ -1052,9 +1052,9 @@ namespace sqlite3pp
 				return "Date";
 			if (strcmp("DATETIME", str) == 0)
 				return "Datetime";
-			if (str_type.starts_with("NUMERIC"))
+			if (str_type.find("NUMERIC") == 0)
 				return "Numeric";
-			if (str_type.starts_with("DECIMAL"))
+			if (str_type.find("DECIMAL") == 0)
 				return "Decimal";
 			if (strcmp("REAL", str) == 0)
 				return "Real";
@@ -1068,15 +1068,15 @@ namespace sqlite3pp
 			// String types
 			if (strcmp("TEXT", str) == 0)
 				return "Text";
-			if (str_type.starts_with("CHARACTER"))
+			if (str_type.find("CHARACTER") == 0)
 				return "Character";
-			if (str_type.starts_with("VARYING CHARACTER")
-				|| str_type.starts_with("VARCHAR"))
+			if (str_type.find("VARYING CHARACTER") == 0
+				|| str_type.find("VARCHAR") == 0)
 				return "Varchar";
-			if (str_type.starts_with("NATIVE CHARACTER")
-				|| str_type.starts_with("NCHAR"))
+			if (str_type.find("NATIVE CHARACTER") == 0
+				|| str_type.find("NCHAR") == 0)
 				return "Nchar";
-			if (str_type.starts_with("NVARCHAR"))
+			if (str_type.find("NVARCHAR") == 0)
 				return "Nvarchar";
 		}
 
