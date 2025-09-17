@@ -938,7 +938,7 @@ namespace sqlite3pp
 		using StrType = std::string;
 		static StrType getTableName() { return  "sqlite_master"; }
 		static StrType getColumnNames() { return  "type, name, tbl_name, rootpage, sql"; }
-		static StrType getSelecColumnNames() { return  "type, name, tbl_name, rootpage, sql"; }
+		static StrType getSelectColumnNames() { return  "type, name, tbl_name, rootpage, sql"; }
 		template<class T> void getStreamData(T q) { q.getter() >> type >> name >> tbl_name >> rootpage >> sql; }
 		static int getColumnCount() { return 5; }
 	public:
@@ -1316,7 +1316,7 @@ namespace sqlite3pp
 		//		The pragma should return columns (cid, name, type, notnull, dflt_value, pk)
 		const char* CommentSection = "////////////////////////////////////////////////////////////////////////////////////////////";
 		if (QueryStr.empty())
-			QueryStr = "SELECT * FROM \"" + TableName + "\"";
+			QueryStr = "SELECT * FROM '" + TableName + "'";
 		std::shared_ptr < sqlite3pp::query> qry(sql_base::CreateQuery(m_db, QueryStr));
 		if (!qry)
 			return false;
@@ -1374,7 +1374,7 @@ namespace sqlite3pp
 			myfile << std::endl;
 
 			if (!m_options.m.exclude_comments)
-				myfile << "\n\t// getTableName, getColumnNames, getSelecColumnNames, and getStreamData are required for sqlite3pp::Table template class" << std::endl;
+				myfile << "\n\t// getTableName, getColumnNames, getSelectColumnNames, and getStreamData are required for sqlite3pp::Table template class" << std::endl;
 
 			// Create getTableName member function. Needed for sqlite3pp::Table template class
 			myfile << "\tstatic StrType getTableName() { return " << m_options.s.str_pre << "\"" << TableName << "\" " << m_options.s.str_post << "; }" << std::endl;
@@ -1385,10 +1385,10 @@ namespace sqlite3pp
 				myfile << c.second << c.first;
 			myfile << "\"" << m_options.s.str_post << "; }" << std::endl;
 
-			// Create getSelecColumnNames member function. Needed for sqlite3pp::Table template class
-			myfile << "\tstatic StrType getSelecColumnNames() { return " << m_options.s.str_pre << "\"";
+			// Create getSelectColumnNames member function. Needed for sqlite3pp::Table template class
+			myfile << "\tstatic StrType getSelectColumnNames() { return " << m_options.s.str_pre << "\"";
 			for (auto& c : columns_with_comma)
-				myfile << c.second << "\\\"" << c.first << "\\\"";
+				myfile << c.second << "'" << c.first << "'";
 			myfile << "\"" << m_options.s.str_post << "; }" << std::endl;
 
 			// Create GetValues member function. Needed for sqlite3pp::Table template class

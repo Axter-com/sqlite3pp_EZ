@@ -546,8 +546,28 @@ namespace sqlite3pp
   }
 
   char const* query::rows::get( int idx, char const* ) const
-  {
-	  return reinterpret_cast<char const*>(SQLITEDLLCONNECT sqlite3_column_text( stmt_, idx ));
+  { // [David Maisonave changes] -- Fixed bug when using types other than SQLITE_TEXT.
+	  int type = SQLITEDLLCONNECT sqlite3_column_type(stmt_, idx);
+	  if (type == SQLITE_TEXT)
+		return reinterpret_cast<char const*>(SQLITEDLLCONNECT sqlite3_column_text( stmt_, idx ));
+	  if (type == SQLITE_INTEGER)
+	  {
+		  int number = SQLITEDLLCONNECT sqlite3_column_int(stmt_, idx);
+		  std::string str_number = std::to_string(number);
+		  return str_number.c_str();
+	  }
+	  if (type == SQLITE_FLOAT)
+	  {
+		  double number = SQLITEDLLCONNECT sqlite3_column_double(stmt_, idx);
+		  std::string str_number = std::to_string(number);
+		  return str_number.c_str();
+	  }
+	  if (type == SQLITE_BLOB)
+	  {
+		  const char* value = reinterpret_cast<char const*>(SQLITEDLLCONNECT sqlite3_column_blob(stmt_, idx));
+		  return value;
+	  }
+	  return "";
   }
 
   std::string query::rows::get( int idx, std::string ) const

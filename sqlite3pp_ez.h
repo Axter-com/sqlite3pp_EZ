@@ -299,8 +299,8 @@ namespace sqlite3pp
 		void Insert(const DataType &d) { push_back(d); Insert(ValueArg(d.GetValues()), T_STR()); }
 		void UpdateDb(const DataType &d) { UpdateDb(ValueArg(d.GetValues()), T_STR()); }
 		void DeleteAll(){ DeleteAll(T_STR()); }
-		std::string CreateSelectQueryStr(WhereClauseArg whereclausearg, std::string) { return "SELECT " + T::getSelecColumnNames() + " FROM \"" + T::getTableName() + "\" " + to_string(whereclausearg.get_Str().c_str()); }
-		std::wstring CreateSelectQueryStr(WhereClauseArg whereclausearg, std::wstring) { return L"SELECT " + T::getSelecColumnNames() + L" FROM \"" + T::getTableName() + L"\" " + to_wstring(whereclausearg.get_Str().c_str()); }
+		std::string CreateSelectQueryStr(WhereClauseArg whereclausearg, std::string) { return "SELECT " + T::getSelectColumnNames() + " FROM '" + T::getTableName() + "' " + to_string(whereclausearg.get_Str().c_str()); }
+		std::wstring CreateSelectQueryStr(WhereClauseArg whereclausearg, std::wstring) { return L"SELECT " + T::getSelectColumnNames() + L" FROM '" + T::getTableName() + L"' " + to_wstring(whereclausearg.get_Str().c_str()); }
 		void ReQuery()
 		{
 			m_VectType.clear();
