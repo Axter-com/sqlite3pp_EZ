@@ -989,6 +989,7 @@ namespace sqlite3pp
 		char str[99] = { 0 };
 		strcpy_s(str, str_org);
 		_strupr_s(str);
+		const std::string str_type = str;
 		// There's no practical method for handling blob or clob other than the Blob and Clob type, so don't even include them  in an option to declare them any other way.
 		if (strcmp("BLOB", str) == 0)
 			return "Blob";
@@ -1051,9 +1052,9 @@ namespace sqlite3pp
 				return "Date";
 			if (strcmp("DATETIME", str) == 0)
 				return "Datetime";
-			if (strcmp("NUMERIC", str) == 0)
+			if (str_type.starts_with("NUMERIC"))
 				return "Numeric";
-			if (strncmp("DECIMAL", str, 7) == 0)
+			if (str_type.starts_with("DECIMAL"))
 				return "Decimal";
 			if (strcmp("REAL", str) == 0)
 				return "Real";
@@ -1067,15 +1068,15 @@ namespace sqlite3pp
 			// String types
 			if (strcmp("TEXT", str) == 0)
 				return "Text";
-			if (strncmp("CHARACTER", str, 9) == 0)
+			if (str_type.starts_with("CHARACTER"))
 				return "Character";
-			if (strncmp("VARYING CHARACTER", str, 17) == 0
-				|| strncmp("VARCHAR", str, 7) == 0)
+			if (str_type.starts_with("VARYING CHARACTER")
+				|| str_type.starts_with("VARCHAR"))
 				return "Varchar";
-			if (strncmp("NATIVE CHARACTER", str, 16) == 0
-				|| strncmp("NCHAR", str, 5) == 0)
+			if (str_type.starts_with("NATIVE CHARACTER")
+				|| str_type.starts_with("NCHAR"))
 				return "Nchar";
-			if (strncmp("NVARCHAR", str, 8) == 0)
+			if (str_type.starts_with("NVARCHAR"))
 				return "Nvarchar";
 		}
 
