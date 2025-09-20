@@ -59,6 +59,7 @@ sqlite3pp::Table<sql_table_MyTableFoo> tbl;  // One line create and populates tb
  * Can iterate each row using (C++11) Range-based loop, C+ stye iteration, or C style iteration
    * Example:
 ````cpp
+sqlite3pp::setGlobalDB(L"MyDatabase.db");
 sqlite3pp::Table<sql_table_MyTableFoo> tbl;
 
 for ( auto row : tbl )											// (C++11) Range-based loop
