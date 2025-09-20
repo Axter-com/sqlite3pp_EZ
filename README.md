@@ -5,6 +5,7 @@ sqlite3pp_EZ
  * Supports correct fetching DB Date and Datetime types 
  * Template Table class
  * SQL Class Builder
+ * Can compile with Manage C++ (CLR) code. (Version 1.1.0 or greater)
 
 This repository is a fork of sqlite3pp, and it includes additional code to add UNICODE support, a template Table class and a SQLite class builder.
 The sqlite3pp::Table class along with the sqlite3pp::SQLiteClassBuilder class allows C++ developers to use type safe variables assocaited with the table column types.
