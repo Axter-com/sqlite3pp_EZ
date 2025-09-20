@@ -5,6 +5,7 @@ sqlite3pp_EZ
  * Supports correct fetching DB Date and Datetime types 
  * Template Table class
  * SQL Class Builder
+ * Can compile with Manage C++ (CLR) code. (Version 1.1.0 or greater)
 
 This repository is a fork of sqlite3pp, and it includes additional code to add UNICODE support, a template Table class and a SQLite class builder.
 The sqlite3pp::Table class along with the sqlite3pp::SQLiteClassBuilder class allows C++ developers to use type safe variables assocaited with the table column types.
@@ -58,6 +59,7 @@ sqlite3pp::Table<sql_table_MyTableFoo> tbl;  // One line create and populates tb
  * Can iterate each row using (C++11) Range-based loop, C+ stye iteration, or C style iteration
    * Example:
 ````cpp
+sqlite3pp::setGlobalDB(L"MyDatabase.db");
 sqlite3pp::Table<sql_table_MyTableFoo> tbl;
 
 for ( auto row : tbl )											// (C++11) Range-based loop
@@ -74,6 +76,13 @@ for (int row = 0; row < tbl.size(); ++row)								// C style iteration
  * The SQLiteClassBuilder class can be used to create a class for each table or view in a SQLite database.
  * The class created by SQLiteClassBuilder is type safe IAW the column defined type.
  * The created class can be used with the template Table class. Example:  sqlite3pp::Table<MyBuilderCreatedClass> tbl;
+### Example creating classes for **all** the tables in a database:
+```` cpp
+	sqlite3pp::HeaderOpt headerOpt = sqlite3pp::SQLiteClassBuilder::HeadersCreatedSqlDir; // Get default header option
+	headerOpt.dest_folder = "..\\SQL_Classes\\"; //  Change default destination folder
+    headerOpt.header_prefix = "sql_DB_TestData_"; // Change default header prefix
+    CreateDbClassInterface("TestData.db", headerOpt);
+````
 ## Common Usage
  * For most common requirements the default settings can be used. 
  * Unless otherwise specified, SQLiteClassBuilder uses predefined setting (std_string_protected_members) as the default settings.
