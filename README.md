@@ -76,6 +76,20 @@ for (int row = 0; row < tbl.size(); ++row)								// C style iteration
  * The SQLiteClassBuilder class can be used to create a class for each table or view in a SQLite database.
  * The class created by SQLiteClassBuilder is type safe IAW the column defined type.
  * The created class can be used with the template Table class. Example:  sqlite3pp::Table<MyBuilderCreatedClass> tbl;
+### Example creating classes:
+```` cpp
+    sqlite3pp::sql_base::SetVerbosityLevel(sqlite3pp::VBLV_WARN);
+    const std::string dbFileName = "..\\..\\SqliteFuzzyPlusExtension\\TestData\\TestData.db";
+	sqlite3pp::HeaderOpt headerOpt = sqlite3pp::SQLiteClassBuilder::HeadersCreatedSqlDir; // Get default header option
+	headerOpt.dest_folder = "..\\SQL_Classes\\"; // Change default destination folder
+    headerOpt.header_prefix = "sql_DB_TestData_";
+	headerOpt.header_include = "sqlite3pp_ez.h";
+    if (CreateDbClassInterface(dbFileName, headerOpt) != 0)
+    {
+        returnValue =+ -32;
+        cout << "Error: Failed to create SQL classes for database " << dbFileName << " in path " << headerOpt.dest_folder << "." << endl;
+    }
+````
 ## Common Usage
  * For most common requirements the default settings can be used. 
  * Unless otherwise specified, SQLiteClassBuilder uses predefined setting (std_string_protected_members) as the default settings.
