@@ -78,7 +78,6 @@ for (int row = 0; row < tbl.size(); ++row)								// C style iteration
  * The created class can be used with the template Table class. Example:  sqlite3pp::Table<MyBuilderCreatedClass> tbl;
 ### Example creating classes:
 ```` cpp
-    sqlite3pp::sql_base::SetVerbosityLevel(sqlite3pp::VBLV_WARN);
     const std::string dbFileName = "..\\..\\SqliteFuzzyPlusExtension\\TestData\\TestData.db";
 	sqlite3pp::HeaderOpt headerOpt = sqlite3pp::SQLiteClassBuilder::HeadersCreatedSqlDir; // Get default header option
 	headerOpt.dest_folder = "..\\SQL_Classes\\"; // Change default destination folder
