@@ -1035,7 +1035,7 @@ namespace sqlite3pp
 
 			if (strcmp("INTEGER", str) == 0 || strcmp("INT", str) == 0 || strcmp("TINYINT", str) == 0 || strcmp("SMALLINT", str) == 0 || strcmp("MEDIUMINTSMALLINT", str) == 0 || strcmp("BIGINT", str) == 0 || strcmp("UNSIGNED BIG INT", str) == 0 || strcmp("INT2", str) == 0 || strcmp("INT8", str) == 0)
 				return "int";
-			if (strcmp("REAL", str) == 0 || strcmp("DOUBLE", str) == 0 || strcmp("DOUBLE PRECISION", str) == 0 || strcmp("FLOAT", str) == 0 || strncmp("DECIMAL", str, 7) == 0 || strcmp("BOOLEANL", str) == 0 || strcmp("BOOLEAN", str) == 0 || strcmp("BOOL", str) == 0 || strcmp("DATE", str) == 0 || strcmp("DATETIME", str) == 0 || strcmp("NUMERIC", str) == 0 || strcmp("NUMBER", str) == 0)
+			if (strcmp("REAL", str) == 0 || strcmp("DOUBLE", str) == 0 || strcmp("DOUBLE PRECISION", str) == 0 || strcmp("FLOAT", str) == 0 || strncmp("DECIMAL", str, 7) == 0 || strcmp("BOOLEANL", str) == 0 || strcmp("BOOLEAN", str) == 0 || strcmp("BOOL", str) == 0 || strcmp("DATE", str) == 0 || strcmp("DATETIME", str) == 0 || strcmp("TIMESTAMP", str) == 0 || strcmp("NUMERIC", str) == 0 || strcmp("NUMBER", str) == 0)
 				return "double";
 
 			if (m_options.m.use_basic_types_only)
