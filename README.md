@@ -76,7 +76,7 @@ for (int row = 0; row < tbl.size(); ++row)								// C style iteration
  * The SQLiteClassBuilder class can be used to create a class for each table or view in a SQLite database.
  * The class created by SQLiteClassBuilder is type safe IAW the column defined type.
  * The created class can be used with the template Table class. Example:  sqlite3pp::Table<MyBuilderCreatedClass> tbl;
-### Example creating classes:
+### Example creating classes for **all** the tables in a database:
 ```` cpp
 	sqlite3pp::HeaderOpt headerOpt = sqlite3pp::SQLiteClassBuilder::HeadersCreatedSqlDir; // Get default header option
 	headerOpt.dest_folder = "..\\SQL_Classes\\"; //  Change default destination folder
