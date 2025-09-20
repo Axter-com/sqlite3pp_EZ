@@ -604,15 +604,25 @@ namespace sqlite3pp
 
 	static void replace_all(std::wstring & data, const std::wstring &toSearch, const std::wstring &replaceStr)
 	{
-		// Get the first occurrence
+		if (toSearch.empty())
+			return;
 		size_t pos = data.find(toSearch);
-		// Repeat till end is reached
 		while (pos != std::string::npos)
 		{
-			// Replace this occurrence of Sub String
 			data.replace(pos, toSearch.size(), replaceStr);
-			// Get the next occurrence from the current position
 			pos = data.find(toSearch, pos + replaceStr.size());
+		}
+	}
+
+	static void replace_all(std::string& str, const std::string& toSearch, const std::string& replaceStr)
+	{
+		if (toSearch.empty())
+			return;
+		size_t start_pos = 0;
+		while ((start_pos = str.find(toSearch, start_pos)) != std::string::npos)
+		{
+			str.replace(start_pos, toSearch.length(), replaceStr);
+			start_pos += replaceStr.length(); // Move past the replaced text
 		}
 	}
 
@@ -1154,19 +1164,10 @@ namespace sqlite3pp
 	static const char TopHeaderCommnetsPrt2[] = "For more details see  https://github.com/David-Maisonave/sqlite3pp_EZ\n*/";
 	const std::vector<std::pair<std::string, std::string> > SQLiteClassBuilder::columns_dummy;
 	
-	void replaceAll(std::string& str, const std::string& from, const std::string& to) {
-		if (from.empty())
-			return;
-		size_t start_pos = 0;
-		while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
-			str.replace(start_pos, from.length(), to);
-			start_pos += to.length(); // Move past the replaced text
-		}
-	}
 	std::string GetValidFuncName(std::string name) 
 	{
 		//ToDo: Use regex to make sure all values are AlphaNum
-		replaceAll(name, " ", "__");
+		replace_all(name, " ", "__");
 		return name;
 	}
 
