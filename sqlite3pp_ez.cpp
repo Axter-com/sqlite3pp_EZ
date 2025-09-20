@@ -715,13 +715,14 @@ namespace sqlite3pp
 #endif  // !SQLITE3PP_ALLOW_NULL_STRING_RETURN
 		std::wstring value;
 		const char * strtype = SQLITEDLLCONNECT sqlite3_column_decltype(stmt_, idx);
+		const std::string str_type = strtype == NULL ? "" : strtype;
 		if (!strtype)
 		{
 			V_COUT(WARN, "Received NULL value when getting column type for idx " << idx << ". Treating type as ASCII or UTF8.");
 		}
 
 		bool GetUnicodeString = false;
-		if (!strtype || strcmp(strtype, "TEXT") == 0 || strncmp("CHARACTER", strtype, 9) == 0 || strncmp("VARYING CHARACTER", strtype, 17) == 0 || strncmp("VARCHAR", strtype, 7) == 0)
+		if (!strtype || strcmp(strtype, "TEXT") == 0 || str_type.find(" SUB_TYPE TEXT") != std::string::npos || strncmp("CHARACTER", strtype, 9) == 0 || strncmp("VARYING CHARACTER", strtype, 17) == 0 || strncmp("VARCHAR", strtype, 7) == 0)
 			GetUnicodeString = false;
 		else if ( strncmp("NCHAR", strtype, 5) == 0 || strncmp("NVARCHAR", strtype, 8) == 0 || strncmp("NATIVE CHARACTER", strtype, 16) == 0)
 			GetUnicodeString = true;
