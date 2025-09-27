@@ -11,7 +11,28 @@ This repository is a fork of sqlite3pp, and it includes additional code to add U
 The sqlite3pp::Table class along with the sqlite3pp::SQLiteClassBuilder class allows C++ developers to use type safe variables assocaited with the table column types.
 
 This package contains all the files required to use SQLite3, SQLite3pp, and SQLite3pp_EZ.  Only minor modifications have been made to SQLite3 C code and SQLite3pp where needed for UNICODE support.  Then bulk of the sqlite3pp_EZ implementation is in sqlite3pp_EZ.h and sqlite3pp_EZ.cpp.
-
+## Content
+- [Unicode support](#unicode-support)
+- [Generic template Table class having the following features](#generic-template-table-class-having-the-following-features)
+- [Common Usage](#common-usage)
+- [For advanced developers/usage](#for-advanced-developersusage)
+- [API's for single global sqlite3pp::database](#apis-for-single-global-sqlite3ppdatabase)
+- [New Usage](#new-usage)
+- [database -- Setting global database variable](#database----setting-global-database-variable)
+- [Template Usage](#template-usage)
+- [Original Usage](#original-usage)
+  - [database](#database)
+  - [command](#command)
+  - [transaction](#transaction)
+  - [query](#query)
+  - [attach](#attach)
+  - [backup](#backup)
+  - [callback](#callback)
+  - [function](#function)
+  - [aggregate](#aggregate)
+- [See also](#See-also)
+- [ToDo](#ToDo)
+- 
 ## Unicode support.
  * Example:
 ````cpp
@@ -481,4 +502,3 @@ sqlite3pp::query qry(
 
 # ToDo
 - Add logic to create classes/structs in multiple programming languages.
-- Create a solution in VS2019, VS2022, and VS2026
