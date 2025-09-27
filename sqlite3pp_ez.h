@@ -148,10 +148,10 @@ namespace sqlite3pp
 #endif // _UNICODE
 
 	typedef std::match_results<tstring::const_iterator> tsmatch;
-	std::string GetUpdatedSrcPath(std::string &src, int EnvVarToFetch = 3, const std::string VarNamePrefix = "%", const std::string VarNamePostfix = "%");// EnvVarToFetch BIT Settings: 1=Get User Var, 2=Get System Paths, 4=Get Misc Var
-	std::string Get_UpdatedPathCopy(std::string src, int EnvVarToFetch = 3, const std::string VarNamePrefix = "%", const std::string VarNamePostfix = "%");
-	std::wstring GetUpdatedSrcPath(std::wstring &src, int EnvVarToFetch = 3, const std::string VarNamePrefix = "%", const std::string VarNamePostfix = "%");
-	std::wstring Get_UpdatedPathCopy(std::wstring src, int EnvVarToFetch = 3, const std::string VarNamePrefix = "%", const std::string VarNamePostfix = "%");
+	std::string GetUpdatedSrcPath(std::string &src, int EnvVarToFetch = 3, const std::string VarNamePrefix = "%", const std::string VarNameSuffix = "%");// EnvVarToFetch BIT Settings: 1=Get User Var, 2=Get System Paths, 4=Get Misc Var
+	std::string Get_UpdatedPathCopy(std::string src, int EnvVarToFetch = 3, const std::string VarNamePrefix = "%", const std::string VarNameSuffix = "%");
+	std::wstring GetUpdatedSrcPath(std::wstring &src, int EnvVarToFetch = 3, const std::string VarNamePrefix = "%", const std::string VarNameSuffix = "%");
+	std::wstring Get_UpdatedPathCopy(std::wstring src, int EnvVarToFetch = 3, const std::string VarNamePrefix = "%", const std::string VarNameSuffix = "%");
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -464,7 +464,7 @@ namespace sqlite3pp
 	{
 		std::string dest_folder;		// Default: "SQL\\"				Destination folder where headers are created. If drive letter is not included in the path, folder is treated as relative path.
 		std::string header_prefix;		// Default: "sql_"				Desired prefix for headers created.
-		std::string header_postfix;		// Default: ""					Desired postfix for header created.
+		std::string header_suffix;		// Default: ""					Desired suffix for header created.
 		std::string file_type;			// Default: "h"					Other options (hpp, hxx, class)
 		std::string header_include;		// Default: "..\sqlite3pp_ez.h"	Other options (SQLite3pp_ez.h)
 	};
