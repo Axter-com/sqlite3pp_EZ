@@ -475,5 +475,10 @@ sqlite3pp::query qry(
 
 
 # See also
+* https://github.com/Axter-com/SQLiteClassBuilder
 * http://www.sqlite.org/
 * https://github.com/iwongu/sqlite3pp
+
+# ToDo
+- Add logic to create classes/structs in multiple programming languages.
+- Create a solution in VS2019, VS2022, and VS2026
