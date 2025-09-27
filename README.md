@@ -32,7 +32,6 @@ This package contains all the files required to use SQLite3, SQLite3pp, and SQLi
   - [aggregate](#aggregate)
 - [See also](#See-also)
 - [ToDo](#ToDo)
-- 
 ## Unicode support.
  * Example:
 ````cpp
